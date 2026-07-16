@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:async';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import '../../models/reel_model.dart';
@@ -702,98 +703,184 @@ class _ReelsPlayerState extends State<ReelsPlayer>
             ),
 
             if (_hasResolutionWarning && !_warningDismissed)
-              Container(
-                color: Colors.black87,
-                child: Center(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 32),
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: VaultTheme.bgCard,
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(color: Colors.redAccent.withValues(alpha: 0.3), width: 1.5),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(
-                          Icons.warning_amber_rounded,
-                          color: Colors.redAccent,
-                          size: 48,
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          "NON-STANDARD RESOLUTION",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.0,
+              Positioned.fill(
+                child: ClipRect(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+                    child: Container(
+                      color: Colors.black.withValues(alpha: 0.55),
+                      child: Center(
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 32),
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                VaultTheme.bgCard.withValues(alpha: 0.88),
+                                VaultTheme.bgDeep.withValues(alpha: 0.94),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(28),
+                            border: Border.all(
+                              color: Colors.redAccent.withValues(alpha: 0.25),
+                              width: 1.5,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.redAccent.withValues(alpha: 0.08),
+                                blurRadius: 40,
+                                spreadRadius: 4,
+                              ),
+                            ],
                           ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          "This video has a resolution of ${_videoController!.value.size.width.toInt()}x${_videoController!.value.size.height.toInt()} which is not divisible by 16. Playback may exhibit diagonal line distortions or green bars due to hardware decoder limitations on some Android chipsets.",
-                          style: const TextStyle(
-                            color: Colors.white70,
-                            fontSize: 12,
-                            height: 1.4,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 24),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(vertical: 14),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    side: const BorderSide(color: Colors.white24),
-                                  ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              // Pulsing warning icon container
+                              Container(
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.redAccent.withValues(alpha: 0.1),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.redAccent.withValues(alpha: 0.15),
+                                      blurRadius: 20,
+                                      spreadRadius: 2,
+                                    ),
+                                  ],
                                 ),
-                                onPressed: () {
-                                  final hostState = context.findAncestorStateOfType<VaultNavigationHostState>();
-                                  if (hostState != null) {
-                                    hostState.setBottomNavVisible(true);
-                                  }
-                                  Navigator.of(context).maybePop();
-                                },
-                                child: const Text(
-                                  "CANCEL",
-                                  style: TextStyle(color: Colors.white70, fontWeight: FontWeight.bold),
+                                child: const Icon(
+                                  Icons.warning_amber_rounded,
+                                  color: Colors.redAccent,
+                                  size: 40,
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.redAccent.withValues(alpha: 0.2),
-                                  foregroundColor: Colors.redAccent,
-                                  padding: const EdgeInsets.symmetric(vertical: 14),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    side: const BorderSide(color: Colors.redAccent, width: 1.0),
-                                  ),
+                              const SizedBox(height: 22),
+                              const Text(
+                                "NON-STANDARD RESOLUTION",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 1.5,
                                 ),
-                                onPressed: () async {
-                                  setState(() {
-                                    _warningDismissed = true;
-                                    _isPlaying = true;
-                                  });
-                                  await _videoController!.play();
-                                },
-                                child: const Text(
-                                  "PLAY ANYWAY",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 14),
+                              RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  style: const TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 12.5,
+                                    height: 1.5,
+                                  ),
+                                  children: [
+                                    const TextSpan(text: "This video has a resolution of "),
+                                    TextSpan(
+                                      text: "${_videoController!.value.size.width.toInt()}x${_videoController!.value.size.height.toInt()}",
+                                      style: TextStyle(
+                                        color: VaultTheme.neonCyan,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const TextSpan(
+                                      text: " which is not divisible by 16. Playback may exhibit diagonal lines or green distortion due to system hardware decoder constraints.",
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 28),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextButton(
+                                      style: TextButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(vertical: 15),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(16),
+                                          side: BorderSide(
+                                            color: Colors.white.withValues(alpha: 0.18),
+                                            width: 1.2,
+                                          ),
+                                        ),
+                                        backgroundColor: Colors.white.withValues(alpha: 0.03),
+                                      ),
+                                      onPressed: () {
+                                        final hostState = context.findAncestorStateOfType<VaultNavigationHostState>();
+                                        if (hostState != null) {
+                                          hostState.setBottomNavVisible(true);
+                                        }
+                                        Navigator.of(context).maybePop();
+                                      },
+                                      child: const Text(
+                                        "CANCEL",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: 0.8,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 14),
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.transparent,
+                                        shadowColor: Colors.transparent,
+                                        padding: EdgeInsets.zero,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(16),
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        setState(() {
+                                          _warningDismissed = true;
+                                          _isPlaying = true;
+                                        });
+                                        await _videoController!.play();
+                                      },
+                                      child: Ink(
+                                        decoration: BoxDecoration(
+                                          gradient: const LinearGradient(
+                                            colors: [Color(0xFFE53935), Color(0xFFC62828)],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                          ),
+                                          borderRadius: BorderRadius.circular(16),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.redAccent.withValues(alpha: 0.35),
+                                              blurRadius: 16,
+                                              offset: const Offset(0, 4),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          padding: const EdgeInsets.symmetric(vertical: 15),
+                                          child: const Text(
+                                            "PLAY ANYWAY",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing: 0.8,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
