@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../../core/constants.dart';
 import '../../core/theme.dart';
 import '../../models/photo_model.dart';
 import '../../services/storage_service.dart';
@@ -86,7 +85,7 @@ class _GalleryPageState extends State<GalleryPage> with SingleTickerProviderStat
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withOpacity(0.5),
+      barrierColor: Colors.black.withValues(alpha: 0.5),
       builder: (context) {
         return ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
@@ -97,7 +96,7 @@ class _GalleryPageState extends State<GalleryPage> with SingleTickerProviderStat
               decoration: BoxDecoration(
                 color: const Color(0xFF12121E),
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-                border: Border.all(color: Colors.white.withOpacity(0.1), width: 1.5),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 1.5),
               ),
               padding: const EdgeInsets.all(24),
               child: Column(
@@ -108,7 +107,7 @@ class _GalleryPageState extends State<GalleryPage> with SingleTickerProviderStat
                       width: 50,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -173,9 +172,9 @@ class _GalleryPageState extends State<GalleryPage> with SingleTickerProviderStat
       margin: const EdgeInsets.symmetric(vertical: 6),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.04),
+        color: Colors.white.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.06)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -198,7 +197,7 @@ class _GalleryPageState extends State<GalleryPage> with SingleTickerProviderStat
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: VaultTheme.neonCyan.withOpacity(0.15),
+              backgroundColor: VaultTheme.neonCyan.withValues(alpha: 0.15),
               foregroundColor: VaultTheme.neonCyan,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               shape: RoundedRectangleBorder(
@@ -315,7 +314,7 @@ class _GalleryPageState extends State<GalleryPage> with SingleTickerProviderStat
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: "Search vault via vibe or tag...",
-                hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+                hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.3)),
                 prefixIcon: const Icon(Icons.search, color: VaultTheme.neonCyan),
                 suffixIcon: _searchQuery.isNotEmpty
                     ? IconButton(
@@ -333,7 +332,7 @@ class _GalleryPageState extends State<GalleryPage> with SingleTickerProviderStat
                 contentPadding: const EdgeInsets.symmetric(vertical: 0),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
-                  borderSide: BorderSide(color: Colors.white.withOpacity(0.08)),
+                  borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
@@ -363,10 +362,10 @@ class _GalleryPageState extends State<GalleryPage> with SingleTickerProviderStat
                     margin: const EdgeInsets.symmetric(horizontal: 4),
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                     decoration: BoxDecoration(
-                      color: isActive ? VaultTheme.neonCyan.withOpacity(0.15) : Colors.transparent,
+                      color: isActive ? VaultTheme.neonCyan.withValues(alpha: 0.15) : Colors.transparent,
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: isActive ? VaultTheme.neonCyan : Colors.white.withOpacity(0.08),
+                        color: isActive ? VaultTheme.neonCyan : Colors.white.withValues(alpha: 0.08),
                         width: 1,
                       ),
                     ),
@@ -390,7 +389,7 @@ class _GalleryPageState extends State<GalleryPage> with SingleTickerProviderStat
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.photo_library_outlined, size: 48, color: VaultTheme.textMuted.withOpacity(0.5)),
+                        Icon(Icons.photo_library_outlined, size: 48, color: VaultTheme.textMuted.withValues(alpha: 0.5)),
                         const SizedBox(height: 16),
                         const Text(
                           "No images saved yet.",
@@ -464,7 +463,7 @@ class _GalleryPageState extends State<GalleryPage> with SingleTickerProviderStat
                           decoration: BoxDecoration(
                             color: const Color(0xFF13121F),
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Colors.white.withOpacity(0.05)),
+                            border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
                           ),
                           clipBehavior: Clip.antiAlias,
                           child: Column(
@@ -853,7 +852,7 @@ class _GalleryPageState extends State<GalleryPage> with SingleTickerProviderStat
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: _isScanning ? VaultTheme.neonCyan : Colors.white.withOpacity(0.1),
+                            color: _isScanning ? VaultTheme.neonCyan : Colors.white.withValues(alpha: 0.1),
                             width: 2,
                           ),
                         ),
@@ -872,7 +871,7 @@ class _GalleryPageState extends State<GalleryPage> with SingleTickerProviderStat
                                   color: VaultTheme.neonCyan,
                                   boxShadow: [
                                     BoxShadow(
-                                      color: VaultTheme.neonCyan.withOpacity(0.8),
+                                      color: VaultTheme.neonCyan.withValues(alpha: 0.8),
                                       blurRadius: 10,
                                       spreadRadius: 2,
                                     )
@@ -887,7 +886,7 @@ class _GalleryPageState extends State<GalleryPage> with SingleTickerProviderStat
                         Icons.fingerprint_rounded,
                         color: _isScanning
                             ? VaultTheme.neonCyan
-                            : Colors.white.withOpacity(0.3),
+                            : Colors.white.withValues(alpha: 0.3),
                         size: 90,
                       ),
                     ],
@@ -900,7 +899,7 @@ class _GalleryPageState extends State<GalleryPage> with SingleTickerProviderStat
                 ElevatedButton(
                   onPressed: _isScanning ? null : _triggerScan,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: VaultTheme.neonCyan.withOpacity(0.15),
+                    backgroundColor: VaultTheme.neonCyan.withValues(alpha: 0.15),
                     disabledBackgroundColor: Colors.transparent,
                     foregroundColor: VaultTheme.neonCyan,
                     padding: const EdgeInsets.symmetric(vertical: 16),
@@ -948,31 +947,31 @@ class _GridThumbPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     if (style == "neon_sunset") {
-      itemPaint.color = VaultTheme.neonCyan.withOpacity(0.4);
+      itemPaint.color = VaultTheme.neonCyan.withValues(alpha: 0.4);
       canvas.drawLine(Offset(0, cy + 10), Offset(size.width, cy + 10), itemPaint);
-      canvas.drawCircle(Offset(cx, cy + 10), 22, Paint()..color = VaultTheme.hotPink.withOpacity(0.3)..style = PaintingStyle.fill);
+      canvas.drawCircle(Offset(cx, cy + 10), 22, Paint()..color = VaultTheme.hotPink.withValues(alpha: 0.3)..style = PaintingStyle.fill);
     } else if (style == "server_room") {
-      itemPaint.color = VaultTheme.neonCyan.withOpacity(0.4);
+      itemPaint.color = VaultTheme.neonCyan.withValues(alpha: 0.4);
       canvas.drawRect(Rect.fromCenter(center: Offset(cx - 20, cy), width: 14, height: size.height - 20), itemPaint);
       canvas.drawRect(Rect.fromCenter(center: Offset(cx + 20, cy), width: 14, height: size.height - 20), itemPaint);
     } else if (style == "hologram_face") {
-      itemPaint.color = VaultTheme.neonCyan.withOpacity(0.4);
+      itemPaint.color = VaultTheme.neonCyan.withValues(alpha: 0.4);
       canvas.drawCircle(Offset(cx, cy - 10), 12, itemPaint);
       canvas.drawLine(Offset(cx - 20, cy + 20), Offset(cx, cy), itemPaint);
       canvas.drawLine(Offset(cx + 20, cy + 20), Offset(cx, cy), itemPaint);
     } else if (style == "quantum_grid") {
-      itemPaint.color = VaultTheme.neonCyan.withOpacity(0.3);
+      itemPaint.color = VaultTheme.neonCyan.withValues(alpha: 0.3);
       canvas.drawCircle(Offset(cx, cy), 15, itemPaint);
       canvas.drawCircle(Offset(cx, cy), 30, itemPaint);
     } else if (style == "audio_knobs") {
-      itemPaint.color = VaultTheme.electricViolet.withOpacity(0.4);
+      itemPaint.color = VaultTheme.electricViolet.withValues(alpha: 0.4);
       canvas.drawLine(Offset(cx - 15, 10), Offset(cx - 15, size.height - 10), itemPaint);
       canvas.drawLine(Offset(cx + 15, 10), Offset(cx + 15, size.height - 10), itemPaint);
       canvas.drawRect(Rect.fromCenter(center: Offset(cx - 15, cy - 10), width: 12, height: 6), Paint()..color = VaultTheme.electricViolet..style = PaintingStyle.fill);
     } else if (style == "neon_palm") {
       itemPaint.color = VaultTheme.hotPink;
       canvas.drawLine(Offset(cx, size.height - 10), Offset(cx, cy), itemPaint);
-      canvas.drawCircle(Offset(cx, cy), 12, Paint()..color = VaultTheme.neonCyan.withOpacity(0.3)..style = PaintingStyle.fill);
+      canvas.drawCircle(Offset(cx, cy), 12, Paint()..color = VaultTheme.neonCyan.withValues(alpha: 0.3)..style = PaintingStyle.fill);
     }
   }
 
@@ -981,3 +980,4 @@ class _GridThumbPainter extends CustomPainter {
     return oldDelegate.style != style;
   }
 }
+

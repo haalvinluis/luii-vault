@@ -566,13 +566,11 @@ class StorageService extends ChangeNotifier {
 
         final title = (item['title'] as String? ?? '').toLowerCase().trim();
         final artist = (item['artist'] as String? ?? '').toLowerCase().trim();
-        final duration = (item['duration'] as String? ?? '').trim();
         final path = (item['audioUrl'] as String? ?? '').toLowerCase().trim();
 
         int existingIdx = uniqueSongs.indexWhere((s) {
           final t = (s['title'] as String? ?? '').toLowerCase().trim();
           final a = (s['artist'] as String? ?? '').toLowerCase().trim();
-          final d = (s['duration'] as String? ?? '').trim();
           final p = (s['audioUrl'] as String? ?? '').toLowerCase().trim();
 
           return (t == title && a == artist) || p == path;

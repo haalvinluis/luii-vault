@@ -47,7 +47,7 @@ class SongModel {
     this.playCount = 0,
     int? dateAdded,
     this.lastPlayed = 0,
-  }) : this.dateAdded = dateAdded ?? DateTime.now().millisecondsSinceEpoch;
+  }) : dateAdded = dateAdded ?? DateTime.now().millisecondsSinceEpoch;
 
   Map<String, dynamic> toJson() {
     return {

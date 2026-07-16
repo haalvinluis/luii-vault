@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import '../../core/theme.dart';
 import '../../models/reel_model.dart';
 import '../../services/storage_service.dart';
+import '../../ai/action_executor.dart';
 import 'reels_player.dart';
 import 'package:video_player/video_player.dart';
 import '../../ai/analytics_logging.dart';
@@ -40,11 +41,48 @@ class _ReelsPageState extends State<ReelsPage> with SingleTickerProviderStateMix
     super.initState();
     final savedData = _storage.loadDownloadedReels();
     _reels = savedData.map((item) => ReelModel.fromJson(item)).toList();
+
+    // Register voice command receiver for list navigation
+    ActionExecutor.onReelsCommand = (command) {
+      if (!mounted) return;
+      if (command == "next") {
+        if (!_showPlayer) {
+          if (_reels.isNotEmpty) {
+            setState(() {
+              _showPlayer = true;
+              _activePageIndex = 0;
+            });
+            context.findAncestorStateOfType<VaultNavigationHostState>()?.setBottomNavVisible(false);
+          }
+        } else {
+          if (_activePageIndex < _reels.length - 1) {
+            _pageController.nextPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          }
+        }
+      } else if (command == "prev") {
+        if (_showPlayer && _activePageIndex > 0) {
+          _pageController.previousPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      } else if (command == "play" || command == "pause") {
+        if (ReelsPlayer.onActivePlayerCommand != null) {
+          ReelsPlayer.onActivePlayerCommand!(command);
+        }
+      }
+    };
   }
 
   @override
   void dispose() {
     _linkController.dispose();
+    if (ActionExecutor.onReelsCommand != null) {
+      ActionExecutor.onReelsCommand = null;
+    }
     super.dispose();
   }
 
@@ -480,7 +518,7 @@ class _ReelsPageState extends State<ReelsPage> with SingleTickerProviderStateMix
                     decoration: BoxDecoration(
                       color: VaultTheme.bgCard,
                       borderRadius: BorderRadius.circular(24),
-                      border: Border.all(color: Colors.white.withOpacity(0.08), width: 1.5),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.08), width: 1.5),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -502,7 +540,7 @@ class _ReelsPageState extends State<ReelsPage> with SingleTickerProviderStateMix
                         const SizedBox(height: 16),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: VaultTheme.neonCyan.withOpacity(0.1),
+                            backgroundColor: VaultTheme.neonCyan.withValues(alpha: 0.1),
                             foregroundColor: VaultTheme.neonCyan,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
@@ -528,7 +566,7 @@ class _ReelsPageState extends State<ReelsPage> with SingleTickerProviderStateMix
                     decoration: BoxDecoration(
                       color: VaultTheme.bgCard,
                       borderRadius: BorderRadius.circular(24),
-                      border: Border.all(color: Colors.white.withOpacity(0.08), width: 1.5),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.08), width: 1.5),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -553,14 +591,14 @@ class _ReelsPageState extends State<ReelsPage> with SingleTickerProviderStateMix
                           style: const TextStyle(color: Colors.white, fontSize: 13),
                           decoration: InputDecoration(
                             hintText: "https://www.instagram.com/reel/...",
-                            hintStyle: TextStyle(color: Colors.white.withOpacity(0.25)),
+                            hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.25)),
                             filled: true,
-                            fillColor: Colors.black.withOpacity(0.3),
+                            fillColor: Colors.black.withValues(alpha: 0.3),
                             prefixIcon: const Icon(Icons.link, color: VaultTheme.neonCyan, size: 20),
                             contentPadding: const EdgeInsets.symmetric(vertical: 16),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
-                              borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
@@ -571,7 +609,7 @@ class _ReelsPageState extends State<ReelsPage> with SingleTickerProviderStateMix
                         const SizedBox(height: 16),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: VaultTheme.neonCyan.withOpacity(0.1),
+                            backgroundColor: VaultTheme.neonCyan.withValues(alpha: 0.1),
                             foregroundColor: VaultTheme.neonCyan,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
@@ -682,7 +720,7 @@ class _ReelsPageState extends State<ReelsPage> with SingleTickerProviderStateMix
         decoration: BoxDecoration(
           color: VaultTheme.bgCard,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: accentColor.withOpacity(0.2), width: 1.5),
+          border: Border.all(color: accentColor.withValues(alpha: 0.2), width: 1.5),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(18),
@@ -698,8 +736,8 @@ class _ReelsPageState extends State<ReelsPage> with SingleTickerProviderStateMix
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
                             colors: [
-                              Colors.black.withOpacity(0.95),
-                              accentColor.withOpacity(0.1),
+                              Colors.black.withValues(alpha: 0.95),
+                              accentColor.withValues(alpha: 0.1),
                             ],
                           ),
                         ),
@@ -717,7 +755,7 @@ class _ReelsPageState extends State<ReelsPage> with SingleTickerProviderStateMix
                     padding: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.black.withOpacity(0.6),
+                      color: Colors.black.withValues(alpha: 0.6),
                     ),
                     child: const Icon(Icons.delete_outline_rounded, color: Colors.redAccent, size: 16),
                   ),
@@ -729,8 +767,8 @@ class _ReelsPageState extends State<ReelsPage> with SingleTickerProviderStateMix
                   width: 48,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.black.withOpacity(0.6),
-                    border: Border.all(color: accentColor.withOpacity(0.4)),
+                    color: Colors.black.withValues(alpha: 0.6),
+                    border: Border.all(color: accentColor.withValues(alpha: 0.4)),
                   ),
                   child: Icon(Icons.play_arrow_rounded, color: accentColor, size: 28),
                 ),
@@ -799,7 +837,7 @@ class _ReelsPageState extends State<ReelsPage> with SingleTickerProviderStateMix
     }
 
     return Container(
-      color: Colors.black.withOpacity(0.85),
+      color: Colors.black.withValues(alpha: 0.85),
       child: Center(
         child: ClipRRect(
           borderRadius: BorderRadius.circular(28),
@@ -809,9 +847,9 @@ class _ReelsPageState extends State<ReelsPage> with SingleTickerProviderStateMix
               width: 300,
               padding: const EdgeInsets.all(28),
               decoration: BoxDecoration(
-                color: VaultTheme.bgCard.withOpacity(0.8),
+                color: VaultTheme.bgCard.withValues(alpha: 0.8),
                 borderRadius: BorderRadius.circular(28),
-                border: Border.all(color: VaultTheme.neonCyan.withOpacity(0.3)),
+                border: Border.all(color: VaultTheme.neonCyan.withValues(alpha: 0.3)),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -833,7 +871,7 @@ class _ReelsPageState extends State<ReelsPage> with SingleTickerProviderStateMix
                     borderRadius: BorderRadius.circular(6),
                     child: LinearProgressIndicator(
                       value: _downloadProgress,
-                      backgroundColor: Colors.white.withOpacity(0.05),
+                      backgroundColor: Colors.white.withValues(alpha: 0.05),
                       valueColor: const AlwaysStoppedAnimation<Color>(VaultTheme.neonCyan),
                       minHeight: 6,
                     ),
@@ -905,9 +943,9 @@ class _ReelsPageState extends State<ReelsPage> with SingleTickerProviderStateMix
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: VaultTheme.neonCyan.withOpacity(0.3)),
+                  border: Border.all(color: VaultTheme.neonCyan.withValues(alpha: 0.3)),
                 ),
                 child: const Row(
                   children: [
@@ -962,7 +1000,7 @@ class _ReelsPageState extends State<ReelsPage> with SingleTickerProviderStateMix
                   Colors.grey[900]!,
                 ],
               ),
-              border: Border.all(color: VaultTheme.neonCyan.withOpacity(0.3), width: 1.5),
+              border: Border.all(color: VaultTheme.neonCyan.withValues(alpha: 0.3), width: 1.5),
             ),
             child: const CircleAvatar(
               backgroundColor: Color(0xFF1E1E2E),
@@ -985,7 +1023,7 @@ class _ReelsPageState extends State<ReelsPage> with SingleTickerProviderStateMix
           Row(
             children: [
               CircleAvatar(
-                backgroundColor: VaultTheme.neonCyan.withOpacity(0.2),
+                backgroundColor: VaultTheme.neonCyan.withValues(alpha: 0.2),
                 radius: 16,
                 child: const Text("👽", style: TextStyle(fontSize: 14)),
               ),
@@ -1074,12 +1112,19 @@ class _ReelThumbnailPreviewState extends State<ReelThumbnailPreview> {
     return SizedBox.expand(
       child: FittedBox(
         fit: BoxFit.cover,
-        child: SizedBox(
-          width: _controller!.value.size.width,
-          height: _controller!.value.size.height,
-          child: VideoPlayer(_controller!),
+        child: ClipRect(
+          clipper: StrideEdgeClipper(
+            width: _controller!.value.size.width,
+            height: _controller!.value.size.height,
+          ),
+          child: SizedBox(
+            width: ((_controller!.value.size.width + 15) ~/ 16) * 16.0,
+            height: ((_controller!.value.size.height + 15) ~/ 16) * 16.0,
+            child: VideoPlayer(_controller!),
+          ),
         ),
       ),
     );
   }
 }
+

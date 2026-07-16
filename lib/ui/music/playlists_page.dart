@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -32,7 +31,6 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
   final StorageService _storage = StorageService();
   final BinauralEngine _binaural = BinauralEngine();
 
-  final List<SongModel> _defaultSongs = [];
   final List<_MusicPlaylistDetail> _playlists = [];
   String _playlistSearchQuery = "";
 
@@ -85,7 +83,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
               backgroundColor: VaultTheme.bgCard,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(24),
-                side: BorderSide(color: Colors.white.withOpacity(0.08)),
+                side: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
               ),
               title: const Text("CREATE PLAYLIST", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1.0)),
               content: Column(
@@ -97,12 +95,12 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       hintText: "Enter playlist name...",
-                      hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+                      hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.3)),
                       filled: true,
-                      fillColor: Colors.black.withOpacity(0.2),
+                      fillColor: Colors.black.withValues(alpha: 0.2),
                       enabledBorder: OutlineInputBorder(
                          borderRadius: BorderRadius.circular(12),
-                         borderSide: BorderSide(color: Colors.white.withOpacity(0.06)),
+                         borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.06)),
                       ),
                       focusedBorder: OutlineInputBorder(
                          borderRadius: BorderRadius.circular(12),
@@ -126,7 +124,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                         child: Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: isSelected ? VaultTheme.neonCyan.withOpacity(0.15) : Colors.transparent,
+                            color: isSelected ? VaultTheme.neonCyan.withValues(alpha: 0.15) : Colors.transparent,
                             shape: BoxShape.circle,
                             border: Border.all(color: isSelected ? VaultTheme.neonCyan : Colors.transparent),
                           ),
@@ -193,7 +191,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
           backgroundColor: VaultTheme.bgCard,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
-            side: BorderSide(color: Colors.white.withOpacity(0.08)),
+            side: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
           ),
           title: const Text("DELETE PLAYLIST", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold)),
           content: Text("Are you sure you want to delete the playlist '$playlistName'? Any files in this playlist will be moved back to the default Playlist.", style: const TextStyle(color: Colors.white70, fontSize: 13)),
@@ -742,7 +740,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
           backgroundColor: VaultTheme.bgCard,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24),
-            side: BorderSide(color: Colors.white.withOpacity(0.08)),
+            side: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
           ),
           title: const Text("RENAME PLAYLIST", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1.0)),
           content: TextField(
@@ -750,12 +748,12 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
             style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
               hintText: "Enter new name...",
-              hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+              hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.3)),
               filled: true,
-              fillColor: Colors.black.withOpacity(0.2),
+              fillColor: Colors.black.withValues(alpha: 0.2),
               enabledBorder: OutlineInputBorder(
                  borderRadius: BorderRadius.circular(12),
-                 borderSide: BorderSide(color: Colors.white.withOpacity(0.06)),
+                 borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.06)),
               ),
               focusedBorder: OutlineInputBorder(
                  borderRadius: BorderRadius.circular(12),
@@ -833,7 +831,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
           backgroundColor: VaultTheme.bgCard,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
-            side: BorderSide(color: Colors.white.withOpacity(0.08)),
+            side: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
           ),
           title: const Text("MANAGE SONG", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold)),
           content: Text("Do you want to remove '${song.title}' from this playlist, or delete it permanently from the Vault?", style: const TextStyle(color: Colors.white70, fontSize: 13)),
@@ -913,7 +911,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                     width: 40,
                     height: 5,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.15),
+                      color: Colors.white.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
@@ -979,7 +977,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                       children: [
                         ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: playlist.themeColor.withOpacity(0.15),
+                            backgroundColor: playlist.themeColor.withValues(alpha: 0.15),
                             foregroundColor: playlist.themeColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
@@ -997,11 +995,11 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                         const SizedBox(width: 12),
                         ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white.withOpacity(0.05),
+                            backgroundColor: Colors.white.withValues(alpha: 0.05),
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
-                              side: BorderSide(color: Colors.white.withOpacity(0.15), width: 1),
+                              side: BorderSide(color: Colors.white.withValues(alpha: 0.15), width: 1),
                             ),
                           ),
                           icon: const Icon(Icons.shuffle_rounded, size: 16),
@@ -1019,7 +1017,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
 
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: playlist.themeColor.withOpacity(0.15),
+                      backgroundColor: playlist.themeColor.withValues(alpha: 0.15),
                       foregroundColor: playlist.themeColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
@@ -1042,15 +1040,15 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                       style: const TextStyle(color: Colors.white, fontSize: 11),
                       decoration: InputDecoration(
                         hintText: "Search songs inside playlist...",
-                        hintStyle: TextStyle(color: Colors.white.withOpacity(0.2)),
+                        hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.2)),
                         prefixIcon: const Icon(Icons.search_rounded, color: VaultTheme.textMuted, size: 16),
                         isDense: true,
                         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                         filled: true,
-                        fillColor: Colors.black.withOpacity(0.2),
+                        fillColor: Colors.black.withValues(alpha: 0.2),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.white.withOpacity(0.04)),
+                          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.04)),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -1104,16 +1102,16 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                                 key: ValueKey(song.id),
                                 margin: const EdgeInsets.symmetric(vertical: 4),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.02),
+                                  color: Colors.white.withValues(alpha: 0.02),
                                   borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(color: Colors.white.withOpacity(0.04)),
+                                  border: Border.all(color: Colors.white.withValues(alpha: 0.04)),
                                 ),
                                 child: ListTile(
                                   dense: true,
                                   leading: Container(
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
-                                      color: playlist.themeColor.withOpacity(0.1),
+                                      color: playlist.themeColor.withValues(alpha: 0.1),
                                       shape: BoxShape.circle,
                                     ),
                                     child: Icon(
@@ -1196,7 +1194,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
               decoration: BoxDecoration(
                 color: VaultTheme.bgCard,
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: Colors.white.withOpacity(0.06)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1220,7 +1218,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                           borderRadius: BorderRadius.circular(4),
                           child: LinearProgressIndicator(
                             value: _downloadProgress,
-                            backgroundColor: Colors.white.withOpacity(0.05),
+                            backgroundColor: Colors.white.withValues(alpha: 0.05),
                             valueColor: const AlwaysStoppedAnimation<Color>(VaultTheme.neonCyan),
                             minHeight: 4,
                           ),
@@ -1242,14 +1240,14 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                           style: const TextStyle(color: Colors.white, fontSize: 12),
                           decoration: InputDecoration(
                             hintText: "Paste song URL or file path...",
-                            hintStyle: TextStyle(color: Colors.white.withOpacity(0.2)),
+                            hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.2)),
                             isDense: true,
                             contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                             filled: true,
-                            fillColor: Colors.black.withOpacity(0.2),
+                            fillColor: Colors.black.withValues(alpha: 0.2),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.white.withOpacity(0.06)),
+                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.06)),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -1261,7 +1259,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
 
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: VaultTheme.neonCyan.withOpacity(0.1),
+                            backgroundColor: VaultTheme.neonCyan.withValues(alpha: 0.1),
                             foregroundColor: VaultTheme.neonCyan,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -1293,7 +1291,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
               decoration: BoxDecoration(
                 color: VaultTheme.bgCard,
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: Colors.white.withOpacity(0.06)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1320,7 +1318,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                   else ...[
                     ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: VaultTheme.electricViolet.withOpacity(0.1),
+                        backgroundColor: VaultTheme.electricViolet.withValues(alpha: 0.1),
                         foregroundColor: VaultTheme.electricViolet,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -1350,9 +1348,9 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                             return Container(
                               margin: const EdgeInsets.symmetric(vertical: 4),
                               decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.2),
+                                color: Colors.black.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: Colors.white.withOpacity(0.04)),
+                                border: Border.all(color: Colors.white.withValues(alpha: 0.04)),
                               ),
                               child: ListTile(
                                 dense: true,
@@ -1360,7 +1358,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                                 subtitle: Text(file.path, style: const TextStyle(color: VaultTheme.textMuted, fontSize: 9), maxLines: 1, overflow: TextOverflow.ellipsis),
                                 trailing: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: VaultTheme.neonCyan.withOpacity(0.15),
+                                    backgroundColor: VaultTheme.neonCyan.withValues(alpha: 0.15),
                                     foregroundColor: VaultTheme.neonCyan,
                                     padding: const EdgeInsets.symmetric(horizontal: 10),
                                     shape: RoundedRectangleBorder(
@@ -1391,15 +1389,15 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
               style: const TextStyle(color: Colors.white, fontSize: 12),
               decoration: InputDecoration(
                 hintText: "Search playlists...",
-                hintStyle: TextStyle(color: Colors.white.withOpacity(0.2)),
+                hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.2)),
                 prefixIcon: const Icon(Icons.search_rounded, color: VaultTheme.textMuted, size: 18),
                 isDense: true,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                 filled: true,
-                fillColor: Colors.black.withOpacity(0.2),
+                fillColor: Colors.black.withValues(alpha: 0.2),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.white.withOpacity(0.06)),
+                  borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.06)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -1433,9 +1431,9 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                         child: Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.01),
+                            color: Colors.white.withValues(alpha: 0.01),
                             borderRadius: BorderRadius.circular(24),
-                            border: Border.all(color: Colors.white.withOpacity(0.08)),
+                            border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -1443,7 +1441,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                               Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.03),
+                                  color: Colors.white.withValues(alpha: 0.03),
                                   shape: BoxShape.circle,
                                 ),
                                 child: const Icon(Icons.add_rounded, color: Colors.white54, size: 22),
@@ -1468,7 +1466,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                         decoration: BoxDecoration(
                           color: VaultTheme.bgCard,
                           borderRadius: BorderRadius.circular(24),
-                          border: Border.all(color: playlist.themeColor.withOpacity(0.15)),
+                          border: Border.all(color: playlist.themeColor.withValues(alpha: 0.15)),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1480,7 +1478,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                                 Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
-                                    color: playlist.themeColor.withOpacity(0.1),
+                                    color: playlist.themeColor.withValues(alpha: 0.1),
                                     shape: BoxShape.circle,
                                   ),
                                   child: Text(playlist.emoji, style: const TextStyle(fontSize: 16)),
@@ -1516,3 +1514,4 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
     );
   }
 }
+

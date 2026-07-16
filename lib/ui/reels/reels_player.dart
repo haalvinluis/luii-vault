@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import '../../models/reel_model.dart';
 import '../../core/theme.dart';
+import '../../main.dart';
 
 class ReelsPlayer extends StatefulWidget {
   final ReelModel reel;
   final bool isActive;
+  static Function(String command)? onActivePlayerCommand;
 
   const ReelsPlayer({super.key, required this.reel, required this.isActive});
 
@@ -36,6 +38,8 @@ class _ReelsPlayerState extends State<ReelsPlayer>
   bool _hasError = false;
   String _errorMessage = "";
   String _codecInfo = "Unknown Codec";
+  bool _hasResolutionWarning = false;
+  bool _warningDismissed = false;
 
   @override
   void initState() {
@@ -54,6 +58,10 @@ class _ReelsPlayerState extends State<ReelsPlayer>
             _transformationController.value = _zoomAnimation!.value;
           }
         });
+
+    if (widget.isActive) {
+      ReelsPlayer.onActivePlayerCommand = _handleVoiceCommand;
+    }
 
     if (widget.reel.localVideoPath != null &&
         File(widget.reel.localVideoPath!).existsSync()) {
@@ -207,12 +215,24 @@ class _ReelsPlayerState extends State<ReelsPlayer>
         );
       }
 
+      if (!_codecInfo.contains("H.264") && !_codecInfo.contains("compatible")) {
+        throw const FormatException(
+          "Unsupported video codec. Only H.264/AAC MP4 is supported.",
+        );
+      }
+
       if (mounted) {
+        final double vWidth = _videoController!.value.size.width;
+        final double vHeight = _videoController!.value.size.height;
+        final bool isAbnormal = (vWidth.toInt() % 16 != 0) || (vHeight.toInt() % 16 != 0);
+
         setState(() {
           _isVideoInitialized = true;
+          _hasResolutionWarning = isAbnormal;
+          _warningDismissed = false;
         });
 
-        if (widget.isActive) {
+        if (widget.isActive && !isAbnormal) {
           await _videoController!.play();
           setState(() {
             _isPlaying = true;
@@ -272,6 +292,16 @@ class _ReelsPlayerState extends State<ReelsPlayer>
         oldWidget.reel.localVideoPath != widget.reel.localVideoPath;
     final activeChanged = oldWidget.isActive != widget.isActive;
 
+    if (activeChanged) {
+      if (widget.isActive) {
+        ReelsPlayer.onActivePlayerCommand = _handleVoiceCommand;
+      } else {
+        if (ReelsPlayer.onActivePlayerCommand == _handleVoiceCommand) {
+          ReelsPlayer.onActivePlayerCommand = null;
+        }
+      }
+    }
+
     if (pathChanged) {
       if (widget.reel.localVideoPath != null &&
           File(widget.reel.localVideoPath!).existsSync()) {
@@ -319,6 +349,9 @@ class _ReelsPlayerState extends State<ReelsPlayer>
 
   @override
   void dispose() {
+    if (ReelsPlayer.onActivePlayerCommand == _handleVoiceCommand) {
+      ReelsPlayer.onActivePlayerCommand = null;
+    }
     _visualizerController.dispose();
     _zoomAnimationController.dispose();
     _transformationController.dispose();
@@ -327,6 +360,26 @@ class _ReelsPlayerState extends State<ReelsPlayer>
       _videoController!.dispose();
     }
     super.dispose();
+  }
+
+  void _handleVoiceCommand(String command) {
+    if (!mounted) return;
+    if (command == "play") {
+      if (_videoController != null && _isVideoInitialized && !_isPlaying) {
+        _videoController!.play();
+        setState(() {
+          _isPlaying = true;
+          _isVideoCompleted = false;
+        });
+      }
+    } else if (command == "pause") {
+      if (_videoController != null && _isVideoInitialized && _isPlaying) {
+        _videoController!.pause();
+        setState(() {
+          _isPlaying = false;
+        });
+      }
+    }
   }
 
   void _togglePlayPause() {
@@ -459,10 +512,16 @@ class _ReelsPlayerState extends State<ReelsPlayer>
                   aspectRatio: _videoController!.value.aspectRatio,
                   child: FittedBox(
                     fit: BoxFit.contain,
-                    child: SizedBox(
-                      width: _videoController!.value.size.width,
-                      height: _videoController!.value.size.height,
-                      child: VideoPlayer(_videoController!),
+                    child: ClipRect(
+                      clipper: StrideEdgeClipper(
+                        width: _videoController!.value.size.width,
+                        height: _videoController!.value.size.height,
+                      ),
+                      child: SizedBox(
+                        width: ((_videoController!.value.size.width + 15) ~/ 16) * 16.0,
+                        height: ((_videoController!.value.size.height + 15) ~/ 16) * 16.0,
+                        child: VideoPlayer(_videoController!),
+                      ),
                     ),
                   ),
                 ),
@@ -641,6 +700,104 @@ class _ReelsPlayerState extends State<ReelsPlayer>
                 ),
               ),
             ),
+
+            if (_hasResolutionWarning && !_warningDismissed)
+              Container(
+                color: Colors.black87,
+                child: Center(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 32),
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: VaultTheme.bgCard,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: Colors.redAccent.withValues(alpha: 0.3), width: 1.5),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.warning_amber_rounded,
+                          color: Colors.redAccent,
+                          size: 48,
+                        ),
+                        const SizedBox(height: 16),
+                        const Text(
+                          "NON-STANDARD RESOLUTION",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.0,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          "This video has a resolution of ${_videoController!.value.size.width.toInt()}x${_videoController!.value.size.height.toInt()} which is not divisible by 16. Playback may exhibit diagonal line distortions or green bars due to hardware decoder limitations on some Android chipsets.",
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 12,
+                            height: 1.4,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(vertical: 14),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    side: const BorderSide(color: Colors.white24),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  final hostState = context.findAncestorStateOfType<VaultNavigationHostState>();
+                                  if (hostState != null) {
+                                    hostState.setBottomNavVisible(true);
+                                  }
+                                  Navigator.of(context).maybePop();
+                                },
+                                child: const Text(
+                                  "CANCEL",
+                                  style: TextStyle(color: Colors.white70, fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.redAccent.withValues(alpha: 0.2),
+                                  foregroundColor: Colors.redAccent,
+                                  padding: const EdgeInsets.symmetric(vertical: 14),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    side: const BorderSide(color: Colors.redAccent, width: 1.0),
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    _warningDismissed = true;
+                                    _isPlaying = true;
+                                  });
+                                  await _videoController!.play();
+                                },
+                                child: const Text(
+                                  "PLAY ANYWAY",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       );
@@ -697,7 +854,7 @@ class _ReelVisualPainter extends CustomPainter {
                 (r.nextDouble() * size.height)) %
             size.height;
 
-        paint.color = VaultTheme.neonCyan.withOpacity(
+        paint.color = VaultTheme.neonCyan.withValues(alpha: 
           (1.0 - (y / size.height)).clamp(0.1, 0.8),
         );
         canvas.drawLine(Offset(x, y), Offset(x, y + length), paint);
@@ -717,7 +874,7 @@ class _ReelVisualPainter extends CustomPainter {
         textPainter.text = TextSpan(
           text: binaryStr,
           style: TextStyle(
-            color: VaultTheme.neonCyan.withOpacity(0.4),
+            color: VaultTheme.neonCyan.withValues(alpha: 0.4),
             fontSize: 14,
             fontWeight: FontWeight.bold,
             fontFamily: "monospace",
@@ -731,7 +888,7 @@ class _ReelVisualPainter extends CustomPainter {
       for (int i = 0; i < 4; i++) {
         final ringProgress = (progress + (i * 0.25)) % 1.0;
         final double radius = ringProgress * (size.width * 0.6);
-        paint.color = VaultTheme.hotPink.withOpacity(1.0 - ringProgress);
+        paint.color = VaultTheme.hotPink.withValues(alpha: 1.0 - ringProgress);
         paint.strokeWidth = 3.0 * (1.0 - ringProgress);
         canvas.drawCircle(center, radius, paint);
       }
@@ -743,7 +900,7 @@ class _ReelVisualPainter extends CustomPainter {
       canvas.drawCircle(center, 25.0 + (sin(progress * pi * 2) * 5), corePaint);
     } else if (visualType == "sacred_geometry") {
       final double angle = progress * pi * 2;
-      paint.color = VaultTheme.electricViolet.withOpacity(0.7);
+      paint.color = VaultTheme.electricViolet.withValues(alpha: 0.7);
 
       canvas.save();
       canvas.translate(cx, cy);
@@ -784,3 +941,21 @@ class _ReelVisualPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
+
+class StrideEdgeClipper extends CustomClipper<Rect> {
+  final double width;
+  final double height;
+
+  StrideEdgeClipper({required this.width, required this.height});
+
+  @override
+  Rect getClip(Size size) {
+    return Rect.fromLTWH(0, 0, width, height);
+  }
+
+  @override
+  bool shouldReclip(covariant StrideEdgeClipper oldClipper) {
+    return oldClipper.width != width || oldClipper.height != height;
+  }
+}
+

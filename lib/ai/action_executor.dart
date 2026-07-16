@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 import '../audio/binaural_engine.dart';
 import '../services/storage_service.dart';
@@ -8,6 +7,7 @@ import 'analytics_logging.dart';
 class ActionExecutor {
   static final BinauralEngine _binaural = BinauralEngine();
   static final StorageService _storage = StorageService();
+  static Function(String command)? onReelsCommand;
 
   static Future<String> execute(String action, String? value, Function(String page)? onNavigate) async {
     AnalyticsLogging.log("ActionExecutor", "Executing: $action, Value: $value");
@@ -84,6 +84,43 @@ class ActionExecutor {
         }
         return "Opening Reels downloader page. Paste any Instagram Reel link there to save it directly to the vault.";
 
+      case "REELS_PLAY":
+        if (onNavigate != null) {
+          onNavigate("reels");
+        }
+        if (onReelsCommand != null) {
+          onReelsCommand!("play");
+          return "Resuming video.";
+        }
+        return "Opened reels.";
+
+      case "REELS_PAUSE":
+        if (onReelsCommand != null) {
+          onReelsCommand!("pause");
+          return "Video paused.";
+        }
+        return "No active video to pause.";
+
+      case "REELS_NEXT":
+        if (onNavigate != null) {
+          onNavigate("reels");
+        }
+        if (onReelsCommand != null) {
+          onReelsCommand!("next");
+          return "Skipping to next video.";
+        }
+        return "Opened reels.";
+
+      case "REELS_PREV":
+        if (onNavigate != null) {
+          onNavigate("reels");
+        }
+        if (onReelsCommand != null) {
+          onReelsCommand!("prev");
+          return "Going back to previous video.";
+        }
+        return "Opened reels.";
+
       case "PLAY_SONG":
         final query = (value ?? "").toLowerCase().trim();
         final rawSongs = _storage.loadDownloadedSongs();
@@ -147,8 +184,12 @@ class ActionExecutor {
     final len2 = s2.length;
     final matrix = List.generate(len1 + 1, (_) => List.filled(len2 + 1, 0));
     
-    for (int i = 0; i <= len1; i++) matrix[i][0] = i;
-    for (int j = 0; j <= len2; j++) matrix[0][j] = j;
+    for (int i = 0; i <= len1; i++) {
+      matrix[i][0] = i;
+    }
+    for (int j = 0; j <= len2; j++) {
+      matrix[0][j] = j;
+    }
     
     for (int i = 1; i <= len1; i++) {
       for (int j = 1; j <= len2; j++) {

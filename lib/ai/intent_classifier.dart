@@ -36,8 +36,19 @@ class IntentClassifier {
         return VoiceIntent(action: "NAVIGATE", value: "gallery");
       }
     }
-    if (clean.contains("reels") || clean.contains("reel") || clean.contains("saved reels")) {
-      if (clean.contains("open") || clean.contains("go to") || clean.contains("show") || clean.contains("navigate")) {
+    if (clean.contains("reels") || 
+        clean.contains("reel") || 
+        clean.contains("video") || 
+        clean.contains("videos") || 
+        clean.contains("shorts") || 
+        clean.contains("clip") || 
+        clean.contains("clips") || 
+        clean.contains("downloader")) {
+      if (clean.contains("open") || 
+          clean.contains("go to") || 
+          clean.contains("show") || 
+          clean.contains("navigate") || 
+          clean.contains("switch")) {
         return VoiceIntent(action: "NAVIGATE", value: "reels");
       }
     }
@@ -61,11 +72,37 @@ class IntentClassifier {
       final target = text.replaceAll(RegExp(r'^(open\s+|go\s+to\s+|navigate\s+to\s+|show\s+|bring\s+up\s+|switch\s+to\s+|move\s+to\s+)'), '').trim();
       return VoiceIntent(action: "NAVIGATE", value: target);
     }
-    if (text == "reels" || text == "gallery" || text == "playlists" || text == "playlist" || text == "player" || text == "music" || text == "photos") {
+    if (text == "reels" || 
+        text == "reel" || 
+        text == "video" || 
+        text == "videos" || 
+        text == "shorts" || 
+        text == "clips" || 
+        text == "downloader" || 
+        text == "gallery" || 
+        text == "playlists" || 
+        text == "playlist" || 
+        text == "player" || 
+        text == "music" || 
+        text == "photos") {
       return VoiceIntent(action: "NAVIGATE", value: text);
     }
     if (text == "return to home" || text == "go back" || text == "back") {
       return VoiceIntent(action: "NAVIGATE_BACK");
+    }
+
+    // Reels Playback Controls
+    if (clean.contains("next video") || clean.contains("next reel") || clean.contains("play next video") || clean.contains("skip video") || clean.contains("skip reel")) {
+      return VoiceIntent(action: "REELS_NEXT");
+    }
+    if (clean.contains("previous video") || clean.contains("previous reel") || clean.contains("prev video") || clean.contains("prev reel") || clean.contains("go back video")) {
+      return VoiceIntent(action: "REELS_PREV");
+    }
+    if (clean.contains("pause video") || clean.contains("pause reel") || clean.contains("stop video") || clean.contains("stop reel")) {
+      return VoiceIntent(action: "REELS_PAUSE");
+    }
+    if (clean.contains("resume video") || clean.contains("resume reel") || clean.contains("play video") || clean.contains("play reel")) {
+      return VoiceIntent(action: "REELS_PLAY");
     }
 
     // Playback Controls

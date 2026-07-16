@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../audio/binaural_engine.dart';
 import '../../core/theme.dart';
-import '../../models/music_model.dart';
-import '../../services/storage_service.dart';
 import 'immersive_player.dart';
 
 class MusicPage extends StatefulWidget {
@@ -14,7 +12,6 @@ class MusicPage extends StatefulWidget {
 
 class _MusicPageState extends State<MusicPage> {
   final BinauralEngine _binaural = BinauralEngine();
-  final StorageService _storage = StorageService();
 
   @override
   void initState() {
@@ -91,12 +88,12 @@ class _MusicPageState extends State<MusicPage> {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
+                      color: Colors.black.withValues(alpha: 0.3),
                       blurRadius: 15,
                       offset: const Offset(0, 10),
                     )
                   ],
-                  border: Border.all(color: Colors.white.withOpacity(0.08)),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
                 ),
                 child: Center(
                   child: Stack(
@@ -105,7 +102,7 @@ class _MusicPageState extends State<MusicPage> {
                       Icon(
                         Icons.album_rounded,
                         size: 160,
-                        color: Colors.white.withOpacity(0.12),
+                        color: Colors.white.withValues(alpha: 0.12),
                       ),
                       Icon(
                         Icons.music_note_rounded,
@@ -138,9 +135,9 @@ class _MusicPageState extends State<MusicPage> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                   decoration: BoxDecoration(
-                    color: VaultTheme.electricViolet.withOpacity(0.1),
+                    color: VaultTheme.electricViolet.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: VaultTheme.electricViolet.withOpacity(0.3)),
+                    border: Border.all(color: VaultTheme.electricViolet.withValues(alpha: 0.3)),
                   ),
                   child: Text(
                     "${song.playlistName.toUpperCase()} PLAYLIST",
@@ -156,7 +153,7 @@ class _MusicPageState extends State<MusicPage> {
                 min: 0.0,
                 max: _binaural.duration.inSeconds.toDouble() > 0.0 ? _binaural.duration.inSeconds.toDouble() : 1.0,
                 activeColor: VaultTheme.neonCyan,
-                inactiveColor: Colors.white.withOpacity(0.05),
+                inactiveColor: Colors.white.withValues(alpha: 0.05),
                 onChanged: (val) {
                   _binaural.seek(Duration(seconds: val.toInt()));
                 },
@@ -211,11 +208,11 @@ class _MusicPageState extends State<MusicPage> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: _binaural.isPlaying ? VaultTheme.electricViolet : Colors.white.withOpacity(0.06),
+                      color: _binaural.isPlaying ? VaultTheme.electricViolet : Colors.white.withValues(alpha: 0.06),
                       boxShadow: _binaural.isPlaying
                           ? [
                               BoxShadow(
-                                color: VaultTheme.electricViolet.withOpacity(0.4),
+                                color: VaultTheme.electricViolet.withValues(alpha: 0.4),
                                 blurRadius: 15,
                                 spreadRadius: 1,
                               )
@@ -262,7 +259,7 @@ class _MusicPageState extends State<MusicPage> {
                       min: 0.0,
                       max: 1.0,
                       activeColor: VaultTheme.electricViolet,
-                      inactiveColor: Colors.white.withOpacity(0.05),
+                      inactiveColor: Colors.white.withValues(alpha: 0.05),
                       onChanged: (val) {
                         _binaural.setVolume(val);
                       },
@@ -281,7 +278,7 @@ class _MusicPageState extends State<MusicPage> {
               decoration: BoxDecoration(
                 color: VaultTheme.bgCard,
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: Colors.white.withOpacity(0.05)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
               ),
               child: Column(
                 children: [
@@ -302,7 +299,7 @@ class _MusicPageState extends State<MusicPage> {
                     min: 100.0,
                     max: 500.0,
                     activeColor: VaultTheme.neonCyan,
-                    inactiveColor: Colors.white.withOpacity(0.05),
+                    inactiveColor: Colors.white.withValues(alpha: 0.05),
                     onChanged: (val) {
                       _binaural.setBaseFreq(val);
                     },
@@ -320,7 +317,7 @@ class _MusicPageState extends State<MusicPage> {
                     min: 1.0,
                     max: 50.0,
                     activeColor: VaultTheme.electricViolet,
-                    inactiveColor: Colors.white.withOpacity(0.05),
+                    inactiveColor: Colors.white.withValues(alpha: 0.05),
                     onChanged: (val) {
                       _binaural.setBeatFreq(val);
                     },
@@ -336,9 +333,9 @@ class _MusicPageState extends State<MusicPage> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.black.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withOpacity(0.04)),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.04)),
                 ),
                 child: Row(
                   children: [
@@ -361,3 +358,4 @@ class _MusicPageState extends State<MusicPage> {
     );
   }
 }
+

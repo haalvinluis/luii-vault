@@ -7,7 +7,6 @@ import 'ui/music/playlists_page.dart';
 import 'ui/music/music_page.dart';
 import 'ui/assistant/assistant_page.dart';
 import 'ai/assistant_engine.dart';
-import 'ui/assistant/assistant_widget.dart';
 
 import 'services/storage_service.dart';
 

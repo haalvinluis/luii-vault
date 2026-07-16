@@ -106,7 +106,6 @@ class _AiAssistantPageState extends State<AiAssistantPage> with TickerProviderSt
           final isWakeListening = state == AssistantState.wakeWordListening;
           final isProcessing = state == AssistantState.processing;
           final isSpeaking = state == AssistantState.speaking;
-          final isIdle = state == AssistantState.idle || state == AssistantState.returningToWakeMode;
 
           String stateText;
           if (!_engine.isActive) {
@@ -144,21 +143,21 @@ class _AiAssistantPageState extends State<AiAssistantPage> with TickerProviderSt
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: !_engine.isActive
-                      ? Colors.redAccent.withOpacity(0.1)
+                      ? Colors.redAccent.withValues(alpha: 0.1)
                       : state == AssistantState.commandListening
-                          ? VaultTheme.hotPink.withOpacity(0.15)
+                          ? VaultTheme.hotPink.withValues(alpha: 0.15)
                           : state == AssistantState.processing
-                              ? VaultTheme.electricViolet.withOpacity(0.15)
-                              : VaultTheme.neonCyan.withOpacity(0.15),
+                              ? VaultTheme.electricViolet.withValues(alpha: 0.15)
+                              : VaultTheme.neonCyan.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                     color: !_engine.isActive
-                        ? Colors.redAccent.withOpacity(0.3)
+                        ? Colors.redAccent.withValues(alpha: 0.3)
                         : state == AssistantState.commandListening
-                            ? VaultTheme.hotPink.withOpacity(0.4)
+                            ? VaultTheme.hotPink.withValues(alpha: 0.4)
                             : state == AssistantState.processing
-                                ? VaultTheme.electricViolet.withOpacity(0.4)
-                                : VaultTheme.neonCyan.withOpacity(0.4),
+                                ? VaultTheme.electricViolet.withValues(alpha: 0.4)
+                                : VaultTheme.neonCyan.withValues(alpha: 0.4),
                   ),
                 ),
                 child: Row(
@@ -241,9 +240,9 @@ class _AiAssistantPageState extends State<AiAssistantPage> with TickerProviderSt
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.02),
+                    color: Colors.white.withValues(alpha: 0.02),
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: Colors.white.withOpacity(0.05)),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
                   ),
                   child: history.isEmpty
                       ? Center(
@@ -268,16 +267,16 @@ class _AiAssistantPageState extends State<AiAssistantPage> with TickerProviderSt
                                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                                 decoration: BoxDecoration(
                                   color: isLuis
-                                      ? Colors.white.withOpacity(0.05)
-                                      : VaultTheme.neonCyan.withOpacity(0.15),
+                                      ? Colors.white.withValues(alpha: 0.05)
+                                      : VaultTheme.neonCyan.withValues(alpha: 0.15),
                                   borderRadius: BorderRadius.circular(16).copyWith(
                                     bottomLeft: isLuis ? const Radius.circular(0) : const Radius.circular(16),
                                     bottomRight: isLuis ? const Radius.circular(16) : const Radius.circular(0),
                                   ),
                                   border: Border.all(
                                     color: isLuis
-                                        ? Colors.white.withOpacity(0.08)
-                                        : VaultTheme.neonCyan.withOpacity(0.3),
+                                        ? Colors.white.withValues(alpha: 0.08)
+                                        : VaultTheme.neonCyan.withValues(alpha: 0.3),
                                   ),
                                 ),
                                 child: isLuis && index == history.length - 1
@@ -288,7 +287,7 @@ class _AiAssistantPageState extends State<AiAssistantPage> with TickerProviderSt
                                     : Text(
                                         cleanText,
                                         style: TextStyle(
-                                          color: isLuis ? Colors.white : Colors.white.withOpacity(0.95),
+                                          color: isLuis ? Colors.white : Colors.white.withValues(alpha: 0.95),
                                           fontSize: 13.5,
                                         ),
                                       ),
@@ -309,9 +308,9 @@ class _AiAssistantPageState extends State<AiAssistantPage> with TickerProviderSt
                       child: Container(
                         height: 48,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.04),
+                          color: Colors.white.withValues(alpha: 0.04),
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: VaultTheme.neonCyan.withOpacity(0.2)),
+                          border: Border.all(color: VaultTheme.neonCyan.withValues(alpha: 0.2)),
                         ),
                         child: TextField(
                           controller: _chatController,
@@ -338,8 +337,8 @@ class _AiAssistantPageState extends State<AiAssistantPage> with TickerProviderSt
                       width: 48,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: VaultTheme.neonCyan.withOpacity(0.15),
-                        border: Border.all(color: VaultTheme.neonCyan.withOpacity(0.4)),
+                        color: VaultTheme.neonCyan.withValues(alpha: 0.15),
+                        border: Border.all(color: VaultTheme.neonCyan.withValues(alpha: 0.4)),
                       ),
                       child: IconButton(
                         icon: const Icon(Icons.send_rounded, color: VaultTheme.neonCyan, size: 18),
@@ -369,7 +368,6 @@ class _AiAssistantPageState extends State<AiAssistantPage> with TickerProviderSt
         final bool isActive = _engine.isActive;
         final double scale = isActive ? 1.0 + (_breathingController.value * 0.08) : 1.0;
         
-        final isListening = state == AssistantState.commandListening || state == AssistantState.wakeWordListening;
         final isProcessing = state == AssistantState.processing;
         final isSpeaking = state == AssistantState.speaking;
         final isIdle = state == AssistantState.idle || state == AssistantState.returningToWakeMode;
@@ -382,7 +380,7 @@ class _AiAssistantPageState extends State<AiAssistantPage> with TickerProviderSt
                     : isSpeaking
                         ? VaultTheme.hotPink
                         : VaultTheme.neonCyan)
-            : Colors.redAccent.withOpacity(0.5);
+            : Colors.redAccent.withValues(alpha: 0.5);
 
         return Transform.scale(
           scale: (isActive && isIdle) ? scale : 1.0,
@@ -407,8 +405,8 @@ class _AiAssistantPageState extends State<AiAssistantPage> with TickerProviderSt
               boxShadow: [
                 BoxShadow(
                   color: isActive
-                      ? glowColor.withOpacity(isIdle ? 0.3 + (_breathingController.value * 0.15) : 0.5)
-                      : Colors.redAccent.withOpacity(0.1),
+                      ? glowColor.withValues(alpha: isIdle ? 0.3 + (_breathingController.value * 0.15) : 0.5)
+                      : Colors.redAccent.withValues(alpha: 0.1),
                   blurRadius: isActive ? (isIdle ? 20 + (_breathingController.value * 10) : 30) : 10,
                   spreadRadius: isActive ? (isIdle ? 2 + (_breathingController.value * 3) : 5) : 1,
                 ),

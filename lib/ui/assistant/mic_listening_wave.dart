@@ -65,7 +65,7 @@ class _WavePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if (!isActive) return;
     final paint = Paint()
-      ..color = VaultTheme.neonCyan.withOpacity(0.5)
+      ..color = VaultTheme.neonCyan.withValues(alpha: 0.5)
       ..strokeWidth = 2.5
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
@@ -93,7 +93,7 @@ class _WavePainter extends CustomPainter {
           : wave == 1
               ? VaultTheme.electricViolet
               : VaultTheme.hotPink)
-          .withOpacity(0.6 - (wave * 0.15));
+          .withValues(alpha: 0.6 - (wave * 0.15));
       canvas.drawPath(path, paint);
     }
   }
@@ -103,3 +103,4 @@ class _WavePainter extends CustomPainter {
     return oldDelegate.animationValue != animationValue || oldDelegate.isActive != isActive;
   }
 }
+

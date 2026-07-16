@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import '../../ai/assistant_engine.dart';
@@ -93,12 +92,12 @@ class _LuiiAssistantWidgetState extends State<LuiiAssistantWidget> with TickerPr
                   padding: const EdgeInsets.all(16),
                   margin: const EdgeInsets.only(bottom: 12),
                   decoration: BoxDecoration(
-                    color: VaultTheme.bgDeep.withOpacity(0.95),
+                    color: VaultTheme.bgDeep.withValues(alpha: 0.95),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: VaultTheme.neonCyan.withOpacity(0.25)),
+                    border: Border.all(color: VaultTheme.neonCyan.withValues(alpha: 0.25)),
                     boxShadow: [
                       BoxShadow(
-                        color: VaultTheme.neonCyan.withOpacity(0.15),
+                        color: VaultTheme.neonCyan.withValues(alpha: 0.15),
                         blurRadius: 15,
                         spreadRadius: 2,
                       ),
@@ -123,7 +122,7 @@ class _LuiiAssistantWidgetState extends State<LuiiAssistantWidget> with TickerPr
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: VaultTheme.neonCyan.withOpacity(0.4),
+                                      color: VaultTheme.neonCyan.withValues(alpha: 0.4),
                                       blurRadius: 6,
                                     ),
                                   ],
@@ -158,7 +157,7 @@ class _LuiiAssistantWidgetState extends State<LuiiAssistantWidget> with TickerPr
                                             ? "Thinking..."
                                             : "Speaking",
                                     style: TextStyle(
-                                      color: VaultTheme.neonCyan.withOpacity(0.8),
+                                      color: VaultTheme.neonCyan.withValues(alpha: 0.8),
                                       fontSize: 10,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -215,9 +214,9 @@ class _LuiiAssistantWidgetState extends State<LuiiAssistantWidget> with TickerPr
                                 child: Container(
                                   height: 38,
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.05),
+                                    color: Colors.white.withValues(alpha: 0.05),
                                     borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(color: VaultTheme.neonCyan.withOpacity(0.3)),
+                                    border: Border.all(color: VaultTheme.neonCyan.withValues(alpha: 0.3)),
                                   ),
                                   child: TextField(
                                     controller: _textController,
@@ -245,8 +244,8 @@ class _LuiiAssistantWidgetState extends State<LuiiAssistantWidget> with TickerPr
                                 width: 38,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: VaultTheme.neonCyan.withOpacity(0.15),
-                                  border: Border.all(color: VaultTheme.neonCyan.withOpacity(0.4)),
+                                  color: VaultTheme.neonCyan.withValues(alpha: 0.15),
+                                  border: Border.all(color: VaultTheme.neonCyan.withValues(alpha: 0.4)),
                                 ),
                                 child: IconButton(
                                   padding: EdgeInsets.zero,
@@ -355,7 +354,7 @@ class _LuiiAssistantWidgetState extends State<LuiiAssistantWidget> with TickerPr
                                   color: (isListening
                                       ? VaultTheme.hotPink
                                       : VaultTheme.neonCyan)
-                                      .withOpacity(isIdle ? 0.3 + (_breathingController.value * 0.15) : 0.5),
+                                      .withValues(alpha: isIdle ? 0.3 + (_breathingController.value * 0.15) : 0.5),
                                   blurRadius: isIdle ? 12 + (_breathingController.value * 6) : 18,
                                   spreadRadius: isIdle ? 1 + (_breathingController.value * 2) : 3,
                                 ),
@@ -395,3 +394,4 @@ class _LuiiAssistantWidgetState extends State<LuiiAssistantWidget> with TickerPr
     );
   }
 }
+

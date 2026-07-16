@@ -60,7 +60,7 @@ class _ImmersivePlayerState extends State<ImmersivePlayer> with SingleTickerProv
           decoration: BoxDecoration(
             color: const Color(0xFF0F0E1E),
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: Colors.white.withOpacity(0.06)),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
           ),
           clipBehavior: Clip.antiAlias,
           child: CustomPaint(
@@ -132,14 +132,14 @@ class _BinauralWavePainter extends CustomPainter {
 
     // Paint Left Channel (Cyan)
     final leftPaint = Paint()
-      ..color = VaultTheme.neonCyan.withOpacity(0.3)
+      ..color = VaultTheme.neonCyan.withValues(alpha: 0.3)
       ..strokeWidth = 2.0
       ..style = PaintingStyle.stroke;
     canvas.drawPath(leftPath, leftPaint);
 
     // Paint Right Channel (Violet)
     final rightPaint = Paint()
-      ..color = VaultTheme.electricViolet.withOpacity(0.3)
+      ..color = VaultTheme.electricViolet.withValues(alpha: 0.3)
       ..strokeWidth = 2.0
       ..style = PaintingStyle.stroke;
     canvas.drawPath(rightPath, rightPaint);
@@ -177,3 +177,4 @@ class _BinauralWavePainter extends CustomPainter {
         oldDelegate.phase != phase;
   }
 }
+

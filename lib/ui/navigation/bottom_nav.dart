@@ -22,7 +22,7 @@ class VaultBottomNav extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.4),
+            color: Colors.black.withValues(alpha: 0.4),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -105,12 +105,12 @@ class VaultBottomNav extends StatelessWidget {
             duration: const Duration(milliseconds: 250),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             decoration: BoxDecoration(
-              color: isActive ? activeColor.withOpacity(0.15) : Colors.transparent,
+              color: isActive ? activeColor.withValues(alpha: 0.15) : Colors.transparent,
               borderRadius: BorderRadius.circular(16),
               boxShadow: isActive
                   ? [
                       BoxShadow(
-                        color: activeColor.withOpacity(0.3),
+                        color: activeColor.withValues(alpha: 0.3),
                         blurRadius: 8,
                         spreadRadius: 1,
                       )
@@ -133,7 +133,7 @@ class VaultBottomNav extends StatelessWidget {
               shadows: isActive
                   ? [
                       Shadow(
-                        color: activeColor.withOpacity(0.5),
+                        color: activeColor.withValues(alpha: 0.5),
                         blurRadius: 4,
                       )
                     ]
@@ -145,3 +145,4 @@ class VaultBottomNav extends StatelessWidget {
     );
   }
 }
+

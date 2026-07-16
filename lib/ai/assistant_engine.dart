@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'intent_classifier.dart';
 import 'command_dispatcher.dart';
 import 'context_manager.dart';
 import 'text_to_speech_engine.dart';
