@@ -1120,7 +1120,21 @@ class _ReelThumbnailPreviewState extends State<ReelThumbnailPreview> {
           child: SizedBox(
             width: ((_controller!.value.size.width + 15) ~/ 16) * 16.0,
             height: ((_controller!.value.size.height + 15) ~/ 16) * 16.0,
-            child: VideoPlayer(_controller!),
+            child: () {
+              final double vWidth = _controller!.value.size.width;
+              final double vHeight = _controller!.value.size.height;
+              final double stride = ((vWidth + 15) ~/ 16) * 16.0;
+              final double padding = stride - vWidth;
+              
+              if (padding > 0) {
+                final double shx = padding / vHeight;
+                return Transform(
+                  transform: Matrix4.identity()..setEntry(0, 1, -shx),
+                  child: VideoPlayer(_controller!),
+                );
+              }
+              return VideoPlayer(_controller!);
+            }(),
           ),
         ),
       ),

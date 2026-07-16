@@ -223,17 +223,13 @@ class _ReelsPlayerState extends State<ReelsPlayer>
       }
 
       if (mounted) {
-        final double vWidth = _videoController!.value.size.width;
-        final double vHeight = _videoController!.value.size.height;
-        final bool isAbnormal = (vWidth.toInt() % 16 != 0) || (vHeight.toInt() % 16 != 0);
-
         setState(() {
           _isVideoInitialized = true;
-          _hasResolutionWarning = isAbnormal;
-          _warningDismissed = false;
+          _hasResolutionWarning = false;
+          _warningDismissed = true;
         });
 
-        if (widget.isActive && !isAbnormal) {
+        if (widget.isActive) {
           await _videoController!.play();
           setState(() {
             _isPlaying = true;
@@ -521,7 +517,21 @@ class _ReelsPlayerState extends State<ReelsPlayer>
                       child: SizedBox(
                         width: ((_videoController!.value.size.width + 15) ~/ 16) * 16.0,
                         height: ((_videoController!.value.size.height + 15) ~/ 16) * 16.0,
-                        child: VideoPlayer(_videoController!),
+                        child: () {
+                          final double vWidth = _videoController!.value.size.width;
+                          final double vHeight = _videoController!.value.size.height;
+                          final double stride = ((vWidth + 15) ~/ 16) * 16.0;
+                          final double padding = stride - vWidth;
+                          
+                          if (padding > 0) {
+                            final double shx = padding / vHeight;
+                            return Transform(
+                              transform: Matrix4.identity()..setEntry(0, 1, -shx),
+                              child: VideoPlayer(_videoController!),
+                            );
+                          }
+                          return VideoPlayer(_videoController!);
+                        }(),
                       ),
                     ),
                   ),
