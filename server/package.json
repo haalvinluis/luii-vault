@@ -1,0 +1,16 @@
+{
+  "name": "luis-ai-proxy",
+  "version": "1.0.0",
+  "description": "Backend proxy that holds the Anthropic API key and serves the Luis voice assistant AI brain.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
