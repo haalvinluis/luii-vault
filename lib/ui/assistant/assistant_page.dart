@@ -117,7 +117,7 @@ class _AiAssistantPageState extends State<AiAssistantPage> with TickerProviderSt
           } else if (isSpeaking) {
             stateText = "Speaking...";
           } else {
-            stateText = "Listening for \"Luis\" or \"Luii\"...";
+            stateText = "Listening for \"Jarvis\"...";
           }
 
           return Column(
@@ -247,7 +247,7 @@ class _AiAssistantPageState extends State<AiAssistantPage> with TickerProviderSt
                   child: history.isEmpty
                       ? Center(
                           child: Text(
-                            "No conversation history yet.\nSay \"Hey Luis\" or type below to start.",
+                            "No conversation history yet.\nSay \"Hey Jarvis\" or type below to start.",
                             textAlign: TextAlign.center,
                             style: TextStyle(color: VaultTheme.textMuted, fontSize: 13, height: 1.5),
                           ),
@@ -257,29 +257,29 @@ class _AiAssistantPageState extends State<AiAssistantPage> with TickerProviderSt
                           itemCount: history.length,
                           itemBuilder: (context, index) {
                             final text = history[index];
-                            final isLuis = text.startsWith("Luis: ");
-                            final cleanText = isLuis ? text.substring(6) : text;
+                            final isJarvis = text.startsWith("Jarvis: ");
+                            final cleanText = isJarvis ? text.substring(8) : text;
 
                             return Align(
-                              alignment: isLuis ? Alignment.centerLeft : Alignment.centerRight,
+                              alignment: isJarvis ? Alignment.centerLeft : Alignment.centerRight,
                               child: Container(
                                 margin: const EdgeInsets.symmetric(vertical: 6),
                                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                                 decoration: BoxDecoration(
-                                  color: isLuis
+                                  color: isJarvis
                                       ? Colors.white.withValues(alpha: 0.05)
                                       : VaultTheme.neonCyan.withValues(alpha: 0.15),
                                   borderRadius: BorderRadius.circular(16).copyWith(
-                                    bottomLeft: isLuis ? const Radius.circular(0) : const Radius.circular(16),
-                                    bottomRight: isLuis ? const Radius.circular(16) : const Radius.circular(0),
+                                    bottomLeft: isJarvis ? const Radius.circular(0) : const Radius.circular(16),
+                                    bottomRight: isJarvis ? const Radius.circular(16) : const Radius.circular(0),
                                   ),
                                   border: Border.all(
-                                    color: isLuis
+                                    color: isJarvis
                                         ? Colors.white.withValues(alpha: 0.08)
                                         : VaultTheme.neonCyan.withValues(alpha: 0.3),
                                   ),
                                 ),
-                                child: isLuis && index == history.length - 1
+                                child: isJarvis && index == history.length - 1
                                     ? TypewriterText(
                                         text: cleanText,
                                         style: const TextStyle(color: Colors.white, fontSize: 13.5),
@@ -287,7 +287,7 @@ class _AiAssistantPageState extends State<AiAssistantPage> with TickerProviderSt
                                     : Text(
                                         cleanText,
                                         style: TextStyle(
-                                          color: isLuis ? Colors.white : Colors.white.withValues(alpha: 0.95),
+                                          color: isJarvis ? Colors.white : Colors.white.withValues(alpha: 0.95),
                                           fontSize: 13.5,
                                         ),
                                       ),

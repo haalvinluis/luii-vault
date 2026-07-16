@@ -27,7 +27,7 @@ class WakeWordDetector {
           final words = clean.split(RegExp(r'\s+'));
           bool matched = false;
           for (var word in words) {
-            if (word == "luis" || word == "luii" || word == "lui" || word == "louis" || word == "looy" || word == "louie") {
+            if (word == "jarvis" || word == "jarves" || word == "jarvs" || word == "jarvises" || word == "jarb") {
               matched = true;
               break;
             }

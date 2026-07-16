@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
 
@@ -23,7 +23,7 @@ class VoiceService {
   LuisVoiceState get state => _state;
 
   bool _initialized = false;
-  static const String wakePhrase = 'hey luis';
+  static const String wakePhrase = 'hey jarvis';
 
   Future<bool> init() async {
     if (_initialized) return true;

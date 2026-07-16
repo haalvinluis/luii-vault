@@ -143,7 +143,7 @@ class _LuiiAssistantWidgetState extends State<LuiiAssistantWidget> with TickerPr
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Text(
-                                    "Luis",
+                                                                    "J.A.R.V.I.S",
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 13,
@@ -186,7 +186,7 @@ class _LuiiAssistantWidgetState extends State<LuiiAssistantWidget> with TickerPr
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text(
-                              "Voice Wake Word (\"Hey Luis\")",
+                              "Voice Wake Word (\"Hey Jarvis\")",
                               style: TextStyle(color: Colors.white70, fontSize: 11),
                             ),
                             Switch(

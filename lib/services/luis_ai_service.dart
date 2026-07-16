@@ -47,9 +47,9 @@ class LuisAiService {
 
     // Check custom specific conversation scenarios
     if (clean.contains("hello") || clean.contains("hi") || clean.contains("hey")) {
-      reply = "Hello! I am Luis. How can I help you today?";
+      reply = "At your service, sir. I am J.A.R.V.I.S. How may I help you today?";
     } else if (clean.contains("who are you") || clean.contains("your name")) {
-      reply = "I am Luis, the AI core of Luis Vault. I can control your playback and answer your questions.";
+      reply = "I am J.A.R.V.I.S., the AI core of your Vault. I can control your playback and answer your questions.";
     } else if (clean.contains("joke")) {
       final jokes = [
         "Why don't programmers like nature? It has too many bugs.",

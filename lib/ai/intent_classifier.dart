@@ -9,7 +9,7 @@ class IntentClassifier {
   /// Splits compound commands using 'and' or 'then' and classifies individual actions.
   static List<VoiceIntent> classify(String text) {
     final normalized = text.toLowerCase().trim()
-        .replaceAll(RegExp(r'^(hey\s+luis,\s*|hey\s+luis\s+|luis,\s*|luis\s+|hay\s+luis,\s*|hay\s+luis\s+)'), '');
+        .replaceAll(RegExp(r'^(hey\s+jarvis,\s*|hey\s+jarvis\s+|jarvis,\s*|jarvis\s+|hay\s+jarvis,\s*|hay\s+jarvis\s+)'), '');
     
     // Check if it's a compound query, split on " and " or " then "
     if (normalized.contains(" and ") || normalized.contains(" then ")) {

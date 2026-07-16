@@ -16,7 +16,7 @@ class ContextManager {
   }
 
   void recordResponse(String response) {
-    _conversationHistory.add("Luis: $response");
+    _conversationHistory.add("Jarvis: $response");
     if (_conversationHistory.length > 20) {
       _conversationHistory.removeAt(0);
     }

@@ -38,12 +38,12 @@ class AiConversationEngine {
       }
     }
 
-    // Friendly conversational prompts (Luis chill mode)
+    // Friendly conversational prompts (Jarvis mode)
     if (clean.contains("hello") || clean.contains("hi") || clean.contains("hey")) {
-      return "Hey there. I'm Luis, your assistant. How's it going?";
+      return "At your service, sir. I'm J.A.R.V.I.S., your assistant. How may I help you today?";
     }
     if (clean.contains("who are you") || clean.contains("your name")) {
-      return "I'm Luis, your calm and intelligent assistant here in your vault. I help manage your playlists, playback, and notes.";
+      return "I'm J.A.R.V.I.S., your calm and intelligent assistant here in your vault. I help manage your playlists, playback, and notes.";
     }
     if (clean.contains("joke") || clean.contains("funny")) {
       final jokes = [
